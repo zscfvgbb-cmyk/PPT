@@ -1,0 +1,23 @@
+/* theme: rust-lab — ICIMC 2026 colorimetry talk. Matches the .pptx palette. */
+:root{
+  --bg:#ffffff;--bg-soft:#f6f6f7;--surface:#ffffff;--surface-2:#f3f4f6;
+  --border:rgba(31,34,38,.10);--border-strong:rgba(31,34,38,.22);
+  --text-1:#1f2226;--text-2:#565a61;--text-3:#8a8f96;
+  --accent:#b5501f;--accent-2:#d38a2e;--accent-3:#1f2226;
+  --good:#3c8d5a;--warn:#b8860b;--bad:#b23a2e;
+  --grad:linear-gradient(135deg,#b5501f,#d38a2e);
+  --grad-soft:linear-gradient(135deg,#fbede4,#fff7ef);
+  --radius:14px;--radius-sm:10px;--radius-lg:20px;
+  --shadow:0 2px 10px rgba(31,34,38,.06);
+  --shadow-lg:0 18px 40px rgba(31,34,38,.12);
+  --font-sans:'Inter','Noto Sans KR',Arial,sans-serif;
+  --font-display:'Noto Serif KR',Georgia,'Times New Roman',serif;
+  --font-serif:'Noto Serif KR',Georgia,serif;
+  /* chart series (validated order: rust, teal, gold, purple) */
+  --c-rust:#b5501f;--c-teal:#00897b;--c-gold:#b8860b;--c-purple:#6a5acd;
+  --c-gray:#6b6f76;--c-red:#b23a2e;
+  /* stages */
+  --c-inc:#3a6ea5;--c-prop:#3c8d5a;--c-mat:#b23a2e;
+  --c-inc-l:#e6eef7;--c-prop-l:#e5f2ea;--c-mat-l:#f8e4e2;
+  --rust-l:#fbede4;
+}
