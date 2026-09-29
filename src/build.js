@@ -705,6 +705,29 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       "이 연구는 해양수산부 지원으로 수행했습니다. 경청해 주셔서 감사합니다. 질문 받겠습니다.");
   }
 
-  await pres.writeFile({ fileName: OUT });
+  // Make pptxgenjs chart XML schema-valid; PowerPoint repairs (drops) charts otherwise.
+  const JSZip = require("jszip");
+  const zip = await JSZip.loadAsync(await pres.write({ outputType: "nodebuffer" }));
+  for (const name of Object.keys(zip.files).filter((n) => /^ppt\/charts\/chart\d+\.xml$/.test(n))) {
+    const xml = await zip.file(name).async("string");
+    let fixed = xml
+      // missing scatter points are written as empty <c:v></c:v>; drop them (idx gaps = blanks)
+      .replace(/<c:pt idx="\d+">\s*<c:v>\s*<\/c:v>\s*<\/c:pt>/g, "")
+      // per-point colours (<c:dPt>) must precede <c:dLbls> within a series
+      .replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (ser) => {
+        const dpts = ser.match(/<c:dPt>[\s\S]*?<\/c:dPt>/g);
+        if (!dpts || !ser.includes("<c:dLbls>")) return ser;
+        const rest = ser.replace(/<c:dPt>[\s\S]*?<\/c:dPt>/g, "");
+        return rest.replace("<c:dLbls>", dpts.join("") + "<c:dLbls>");
+      })
+      // category-axis-only elements are not allowed on a value axis (scatter X axis)
+      .replace(/<c:valAx>[\s\S]*?<\/c:valAx>/g, (ax) => ax.replace(/<c:(auto|lblAlgn|noMultiLvlLbl) [^>]*\/>/g, ""));
+    // 2-D charts reference exactly two axes; drop dangling third axId (no serAx present)
+    if (!fixed.includes("<c:serAx>")) {
+      fixed = fixed.replace(/(<c:(?:bar|line|area)Chart>[\s\S]*?)(<c:axId val="\d+"\/>\s*<c:axId val="\d+"\/>)\s*<c:axId val="\d+"\/>/g, "$1$2");
+    }
+    if (fixed !== xml) zip.file(name, fixed);
+  }
+  require("fs").writeFileSync(OUT, await zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" }));
   console.log("wrote", OUT);
 })();
