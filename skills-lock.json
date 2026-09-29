@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "html-ppt": {
+      "source": "aiden-44/html-ppt-skill",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "615306eccf3bef9d051a5ea0dbb81604bbb4d9f1c628822d5fd18b9a4b2ac0fe"
+    }
+  }
+}
