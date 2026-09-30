@@ -393,7 +393,7 @@ slide("", `
 
 // ---------- page ----------
 const html = `<!DOCTYPE html>
-<html lang="en" data-themes="rust-lab">
+<html lang="en" data-themes="rust-lab,academic-paper,editorial-serif,corporate-clean,tokyo-night">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">

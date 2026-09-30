@@ -8,3 +8,13 @@
   }
   window.addEventListener('resize',fit); fit();
 })();
+
+/* Show the theme name briefly when T switches themes (runtime sets data-theme). */
+(function(){
+  var t=document.createElement('div'); t.className='theme-toast'; document.body.appendChild(t);
+  var h; new MutationObserver(function(){
+    var n=document.documentElement.getAttribute('data-theme'); if(!n) return;
+    t.textContent='Theme · '+n; t.classList.add('show'); clearTimeout(h);
+    h=setTimeout(function(){t.classList.remove('show')},1400);
+  }).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();

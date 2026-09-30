@@ -6,6 +6,7 @@ Open `index.html` in Chrome or Edge (whole `html/` folder must stay together).
 |---|---|
 | ← → / Space | Next / previous slide |
 | S | Presenter window: current + next slide, script (EN + KO), timer |
+| T | Cycle themes: rust-lab → academic-paper → editorial-serif → corporate-clean → tokyo-night (dark) |
 | N | Script drawer at the bottom of the audience window |
 | F | Fullscreen |
 | O | Slide overview |
