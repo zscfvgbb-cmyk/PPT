@@ -140,19 +140,6 @@ function stageLegend(s, x, y, w) {
   const gw = (w - 0.2) / 3;
   STAGE.forEach((st, i) => pill(s, `${st.name}  ${st.span}`, x + i * (gw + 0.1), y, gw, st.col, 10.5));
 }
-// ---------- animation markers ----------
-// step(s) opens a new reveal group: everything added to the slide after it
-// appears together, groups play one after another when the slide opens.
-// Objects added before the first step() (title, footer) stay static.
-function step(s) { (s._steps = s._steps || []).push(s._slideObjects.length); }
-function tagSteps(s) {
-  const b = (s._steps || []).concat([s._slideObjects.length]);
-  for (let k = 0; k + 1 < b.length; k++)
-    for (let i = b[k]; i < b[k + 1]; i++) {
-      const o = s._slideObjects[i]; o.options = o.options || {};
-      o.options.objectName = `anim ${k} ${i}`;
-    }
-}
 function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
 
 (async () => {
@@ -171,7 +158,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
   {
     const s = pres.addSlide(); pageNo += 1;
     s.background = { color: C.dark };
-    step(s);
     txt(s, "ICIMC 2026  ·  Seoul Olympic Parktel  ·  November 3–7, 2026", { x: MX, y: 0.5, w: 9, h: 0.3, fontSize: 12, color: C.faint });
     txt(s, "Color-Based Life Prediction of Carbon Steel", { x: MX, y: 1.0, w: 12.1, h: 0.9, fontFace: HF, fontSize: 40, bold: true, color: C.white, valign: "middle" });
     txt(s, "Linking CIE L*a*b* colorimetry to corrosion rate", { x: MX, y: 2.0, w: 11, h: 0.5, fontFace: HF, fontSize: 22, italic: true, color: C.rustSoft });
@@ -180,7 +166,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       { text: ", Junbeom Park, Beomsoo Kim, Jaeseung Kwon, Jung-Pil Noh, Jeonghyeon Yang*", options: { color: "D5D7DA" } },
     ], { x: MX, y: 2.85, w: 12, h: 0.35, fontFace: BF, fontSize: 15, margin: 0, isTextBox: true });
     txt(s, "Department of Mechanical System Engineering, Gyeongsang National University, Tongyeong, Korea   ·   * Corresponding author", { x: MX, y: 3.25, w: 12, h: 0.3, fontSize: 11.5, color: C.faint });
-    step(s);
     // real specimen strip, cycle 0 → 30
     const n = 9, gap = 0.12, tw = (W - 2 * MX - gap * (n - 1)) / n;
     CYC.forEach((c, i) => {
@@ -204,7 +189,7 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       ["04", "What color tells us", I.eye],
     ];
     const cw = 2.7, gap = (W - 2 * MX - 4 * cw) / 3;
-    items.forEach(([n, t, ic], i) => { step(s);
+    items.forEach(([n, t, ic], i) => {
       const x = MX + i * (cw + gap), y = 2.4;
       card(s, x, y, cw, 2.6, i === 3 ? C.rustLight : C.panel);
       iconDot(s, ic, x + 0.35, y + 0.4, 0.8, i === 3 ? C.rust : C.ink);
@@ -220,11 +205,9 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
   // ===== 3. Background =====
   {
     const s = base("Rust color carries phase information");
-    step(s);
     // stat
     txt(s, "3–4%", { x: MX, y: 1.5, w: 4.5, h: 1.2, fontFace: HF, fontSize: 72, bold: true, color: C.rust, valign: "middle" });
     txt(s, "of global GDP lost to corrosion", { x: MX, y: 2.75, w: 4.8, h: 0.4, fontSize: 16, color: C.muted });
-    step(s);
     // flow: rust layer -> lab
     card(s, MX, 3.5, 5.3, 1.25);
     iconDot(s, I.micro, MX + 0.25, 3.72, 0.8, C.ink);
@@ -232,21 +215,19 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       { text: "Rust phases decide what happens next", options: { bold: true, breakLine: true } },
       { text: "Today: XRD / SEM — specimen goes to the lab", options: { color: C.muted, fontSize: 13 } },
     ], { x: MX + 1.25, y: 3.72, w: 3.9, h: 0.85, fontSize: 15, valign: "middle" });
-    step(s);
     // phase swatches
     const ph = [
       ["γ-FeOOH", "Lepidocrocite", "Orange-yellow", "D38A2E"],
       ["α-FeOOH", "Goethite", "Reddish-brown", "7A3E1D"],
       ["Fe₃O₄", "Magnetite", "Black", "1B1B1B"],
     ];
-    ph.forEach(([f, n, c, col], i) => { step(s);
+    ph.forEach(([f, n, c, col], i) => {
       const x = 7.0 + i * 1.95;
       s.addShape(pres.shapes.OVAL, { x: x + 0.2, y: 1.55, w: 1.35, h: 1.35, fill: { color: col }, line: { color: C.line, width: 1 } });
       txt(s, f, { x, y: 3.05, w: 1.75, h: 0.4, fontFace: HF, fontSize: 17, bold: true, align: "center" });
       txt(s, `${n}\n${c}`, { x, y: 3.45, w: 1.75, h: 0.6, fontSize: 12, color: C.muted, align: "center" });
     });
     txt(s, "Swatch colors are illustrative.", { x: 7.0, y: 4.15, w: 5.8, h: 0.25, fontSize: 10, italic: true, color: C.faint, align: "center" });
-    step(s);
     // research question
     s.addShape(RR, { x: MX, y: 5.2, w: W - 2 * MX, h: 1.4, fill: { color: C.dark }, line: { color: C.dark }, rectRadius: 0.08 });
     iconDot(s, I.camera, MX + 0.35, 5.5, 0.8, C.rust);
@@ -260,7 +241,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
   // ===== 4. Methods overview =====
   {
     const s = base("Six measurements on one specimen set");
-    step(s);
     // optical group
     card(s, MX, 1.5, 4.6, 4.3, C.rustLight);
     txt(s, "OPTICAL  ·  NON-DESTRUCTIVE", { x: MX + 0.35, y: 1.72, w: 4, h: 0.3, fontSize: 11, bold: true, color: C.rust, charSpacing: 1 });
@@ -270,11 +250,9 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       txt(s, t, { x: MX + 1.6, y: y + 0.08, w: 2.9, h: 0.45, fontFace: HF, fontSize: 20, bold: true });
       txt(s, d, { x: MX + 1.6, y: y + 0.55, w: 2.9, h: 0.35, fontSize: 14, color: C.muted });
     });
-    step(s);
     // arrow
     s.addImage({ data: I.arrowR, x: 5.55, y: 3.45, w: 0.5, h: 0.5 });
     txt(s, "checked\nagainst", { x: 5.25, y: 4.05, w: 1.1, h: 0.55, fontSize: 12, color: C.muted, align: "center" });
-    step(s);
     // reference group
     card(s, 6.55, 1.5, W - MX - 6.55, 4.3);
     txt(s, "REFERENCE  ·  LAB-BASED", { x: 6.9, y: 1.72, w: 4, h: 0.3, fontSize: 11, bold: true, color: C.muted, charSpacing: 1 });
@@ -285,7 +263,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       txt(s, t, { x: x + 1.0, y: y + 0.02, w: 1.9, h: 0.4, fontFace: HF, fontSize: 17, bold: true });
       txt(s, d, { x: x + 1.0, y: y + 0.44, w: 1.9, h: 0.5, fontSize: 12.5, color: C.muted });
     });
-    step(s);
     // sampling strip
     txt(s, [
       { text: "9", options: { bold: true, color: C.rust, fontSize: 20 } }, { text: " sampling points   ·   ", options: { color: C.muted } },
@@ -300,7 +277,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
   // ===== 5. Specimen & CCT =====
   {
     const s = base("Specimens and accelerated exposure");
-    step(s);
     // doughnut of one cycle
     s.addChart(pres.charts.DOUGHNUT, [{ name: "CCT", labels: ["Fog", "Dry", "Humid"], values: [2, 4, 2] }], {
       x: MX, y: 1.35, w: 3.6, h: 3.6, holeSize: 62, chartColors: [C.inc, C.amber, C.prop],
@@ -316,7 +292,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       txt(s, d, { x: 4.85, y: y + 0.4, w: 2.4, h: 0.3, fontSize: 12.5, color: C.muted });
     });
     txt(s, "Q-FOG CCT-600  ·  modified ISO 14993", { x: MX, y: 4.95, w: 6.5, h: 0.3, fontSize: 12, color: C.muted, italic: true });
-    step(s);
     // specimen card
     card(s, 7.55, 1.45, W - MX - 7.55, 1.75);
     txt(s, "SPECIMEN", { x: 7.85, y: 1.62, w: 3, h: 0.3, fontSize: 11, bold: true, color: C.rust, charSpacing: 1 });
@@ -325,7 +300,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       { text: "30 × 70 × 1 mm  ·  0.12 wt.% C", options: { breakLine: true } },
       { text: "SiC #220 ground  ·  ethanol ultrasonic clean", options: {} },
     ], { x: 7.85, y: 1.98, w: 4.8, h: 1.5, fontSize: 13.5, color: C.ink, paraSpaceAfter: 4 });
-    step(s);
     // UPW callout
     card(s, 7.55, 3.45, W - MX - 7.55, 1.4, C.rustLight);
     iconDot(s, I.tint, 7.8, 3.72, 0.8, C.rust);
@@ -333,7 +307,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       { text: "Ultrapure water, not 5% NaCl", options: { bold: true, breakLine: true } },
       { text: "Salt residue disturbed imaging → chloride-free atmospheric test", options: { color: C.muted, fontSize: 12.5 } },
     ], { x: 8.8, y: 3.65, w: 3.85, h: 1.0, fontSize: 15, valign: "middle" });
-    step(s);
     // sampling timeline
     txt(s, "Sampling points (cycles)", { x: MX, y: 5.55, w: 5, h: 0.3, fontSize: 12, bold: true, color: C.muted });
     const tx0 = MX + 0.2, tx1 = W - MX - 0.2, ty = 6.2;
@@ -359,7 +332,7 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       { t: "L*, a*, b*", d: "Mean over that fixed\npixel set, every cycle", color: hex(...RGB[5]) },
     ];
     const cw = 2.55, gap = (W - 2 * MX - 4 * cw) / 3;
-    steps.forEach((st, i) => { step(s);
+    steps.forEach((st, i) => {
       const x = MX + i * (cw + gap), y = 1.45;
       if (st.img) s.addImage({ path: IMG(st.img), x, y, w: cw, h: cw });
       else {
@@ -373,7 +346,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       if (i < 3) s.addImage({ data: I.arrow, x: x + cw + gap / 2 - 0.13, y: y + cw / 2 - 0.13, w: 0.26, h: 0.26 });
     });
     txt(s, "Example: cycle 15. The same pixel set is tracked across all cycles, so a color change is not a coverage change.", { x: MX, y: 5.35, w: W - 2 * MX, h: 0.3, fontSize: 12, italic: true, color: C.muted });
-    step(s);
     // electrochem chips
     card(s, MX, 5.85, W - 2 * MX, 0.9);
     iconDot(s, I.bolt, MX + 0.2, 5.97, 0.66, C.ink);
@@ -394,7 +366,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
   // ===== 7. Rust area =====
   {
     const s = base("Coverage rose fastest between cycles 10 and 15");
-    step(s);
     // masks 2x2
     const ms = [[5, 5.6], [10, 20.8], [15, 49.5], [30, 63.4]];
     const tw = 1.9, g = 0.2;
@@ -405,7 +376,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       txt(s, [{ text: `${c} cyc  `, options: { color: C.muted } }, { text: `${v}%`, options: { bold: true, color: STAGE[stageOf(c)].col } }], { x, y: y + tw + 0.05, w: tw, h: 0.35, fontSize: 13, align: "center" });
     });
     txt(s, "Segmented rust mask; value = mean of 2 specimens", { x: MX, y: 6.3, w: 4.2, h: 0.3, fontSize: 10.5, italic: true, color: C.faint });
-    step(s);
     // chart
     const box = { x: 4.95, y: 1.3, w: 7.8, h: 4.3 };
     const m = xyChart(s, box, [{ name: "Specimen 1", values: RA1, color: C.rust }, { name: "Specimen 2", values: RA2, color: C.ink }], { ymin: 0, ymax: 70, yunit: 10, ytitle: "Rust area (%)" });
@@ -416,7 +386,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       txt(s, t, { x: x + 0.45, y: m.pa.y + 0.12, w: 1.2, h: 0.26, fontSize: 11, color: C.ink });
     });
     stageLegend(s, m.pa.x, 5.75, m.pa.w);
-    step(s);
     // stat row
     const st = [["< 6%", "cycles 0–5", C.inc], ["49.5%", "cycle 15", C.prop], ["≈ 63%", "cycles 20–30", C.mat]];
     st.forEach(([v, l, col], i) => {
@@ -432,11 +401,8 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
   {
     const s = base("Polarization resistance fell as the layer grew");
     const bw = (W - 2 * MX - 0.4) / 2;
-    step(s);
     const m1 = xyChart(s, { x: MX, y: 1.3, w: bw, h: 3.9 }, [{ name: "Rp", values: RP, color: C.ink }], { ymin: 0, ymax: 1000, yunit: 200, ytitle: "Rp (Ω·cm²)", layout: { x: 0.14, w: 0.82 } });
-    step(s);
     const m2 = xyChart(s, { x: MX + bw + 0.4, y: 1.3, w: bw, h: 3.9 }, [{ name: "CR", values: CR, color: C.rust }], { ymin: 0, ymax: 2, yunit: 0.5, ytitle: "Corrosion rate (mmpy)", layout: { x: 0.14, w: 0.82 } });
-    step(s);
     // annotations
     const ann = (m, xv, yv, t, col, dx = 0.12, dy = -0.42) => txt(s, t, { x: m.px(xv) + dx, y: m.py(yv) + dy, w: 1.6, h: 0.3, fontSize: 12, bold: true, color: col });
     ann(m1, 1, 852.2, "852 (cycle 1)", C.ink);
@@ -445,7 +411,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
     ann(m1, 30, 191.2, "191", C.mat, -0.35, -0.42);
     ann(m2, 3, 0.447, "0.45", C.inc, -0.25, -0.42);
     ann(m2, 30, 1.745, "1.75", C.mat, -0.55, -0.1);
-    step(s);
     // stat row
     const st = [
       ["Cycle 1", "Transient Rp peak — thin initial oxide film", C.panel, C.ink],
@@ -453,7 +418,7 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       ["3.9×", "Corrosion rate, 0.45 → 1.75 mmpy (cycle 3 → 30)", C.rustLight, C.rust],
     ];
     const cw = (W - 2 * MX - 0.4) / 3;
-    st.forEach(([v, l, bg, col], i) => { step(s);
+    st.forEach(([v, l, bg, col], i) => {
       const x = MX + i * (cw + 0.2);
       card(s, x, 5.55, cw, 1.2, bg);
       txt(s, v, { x: x + 0.3, y: 5.65, w: cw - 0.5, h: 0.55, fontFace: HF, fontSize: 26, bold: true, color: col, valign: "middle" });
@@ -467,7 +432,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
   // ===== 9. SEM/EDS =====
   {
     const s = base("Surface oxygen climbed to 37.9 wt.%");
-    step(s);
     const cs = [0, 5, 15, 30], tw = 1.6, th = tw * 301 / 401, g = 0.12;
     txt(s, "SEM ×500", { x: MX + 0.75, y: 1.3, w: tw, h: 0.3, fontSize: 12, bold: true, color: C.muted, align: "center" });
     txt(s, "O map", { x: MX + 0.75 + tw + g, y: 1.3, w: tw, h: 0.3, fontSize: 12, bold: true, color: C.muted, align: "center" });
@@ -477,7 +441,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       s.addImage({ path: IMG(`sem_${c}.jpg`), x: MX + 0.75, y, w: tw, h: th });
       s.addImage({ path: IMG(`omap_${c}.jpg`), x: MX + 0.75 + tw + g, y, w: tw, h: th });
     });
-    step(s);
     // O content chart: stacked by stage so each column takes its stage color
     const cats = O_CYC.map((c) => `${c} cyc`);
     const cx = 5.55;
@@ -490,7 +453,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       valGridLine: { color: "E6E8EB", size: 0.75 }, catGridLine: { style: "none" }, catAxisLineColor: C.faint, valAxisLineShow: false,
     });
     const obs = [["0", "Smooth ground surface"], ["5", "Isolated oxide nodules"], ["15", "Porous, cracked layer spreads"], ["30", "Continuous layer, no bare metal"]];
-    step(s);
     card(s, cx, 5.6, W - MX - cx, 1.15, C.rustLight);
     txt(s, [
       { text: "+1.9 wt.% O", options: { bold: true, color: C.rust, fontFace: HF, fontSize: 22 } },
@@ -506,10 +468,8 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
   {
     const s = base("γ-FeOOH appeared first, then Fe₃O₄");
     const iw = 6.6, ih = iw * 2140 / 2967;
-    step(s);
     s.addImage({ path: IMG("xrd.png"), x: MX, y: 1.3, w: iw, h: ih });
     txt(s, "No.1–9 = cycles 0, 1, 3, 5, 10, 15, 20, 25, 30", { x: MX, y: 1.3 + ih + 0.05, w: iw, h: 0.3, fontSize: 11, italic: true, color: C.muted, align: "center" });
-    step(s);
     // phase onset timeline
     const gx = 8.95, gw = W - MX - gx, gy = 1.75, rh = 0.78;
     txt(s, "Phase detected by XRD", { x: 7.5, y: 1.3, w: 5, h: 0.3, fontSize: 13, bold: true });
@@ -527,7 +487,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
     txt(s, "CCT cycle", { x: gx, y: ay + 0.25, w: gw, h: 0.25, fontSize: 11, color: C.muted, align: "center" });
     // onset markers
     [[10, "D38A2E"], [15, C.ink]].forEach(([c, col]) => s.addShape(pres.shapes.LINE, { x: X(c), y: gy, w: 0, h: 3 * rh - 0.1, line: { color: col, width: 1, dashType: "dash" } }));
-    step(s);
     card(s, 7.5, 5.35, W - MX - 7.5, 1.35, C.rustLight);
     txt(s, [
       { text: "No crystalline oxide through cycle 5", options: { bold: true, breakLine: true } },
@@ -541,7 +500,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
   // ===== 11. Color evolution =====
   {
     const s = base("The surface turned yellow during propagation");
-    step(s);
     // swatch strip
     const n = 9, g = 0.08, sw = (W - 2 * MX - g * (n - 1)) / n;
     CYC.forEach((c, i) => {
@@ -551,11 +509,8 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
     });
     txt(s, "Mean color of the common rust region (camera sRGB)", { x: MX, y: 1.0, w: 8, h: 0.28, fontSize: 11, italic: true, color: C.faint });
     const bw = 5.0;
-    step(s);
     const mL = xyChart(s, { x: MX, y: 2.45, w: bw, h: 3.6 }, [{ name: "L*", values: Ls, color: C.muted }], { ymin: 24, ymax: 36, yunit: 4, ytitle: "L*  (lightness)", layout: { x: 0.15, w: 0.81, h: 0.72 } });
-    step(s);
     const mB = xyChart(s, { x: MX + bw + 0.3, y: 2.45, w: W - 2 * MX - bw - 0.3, h: 3.6 }, [{ name: "a*", values: As, color: C.mat }, { name: "b*", values: Bs, color: C.amber }], { ymin: -2, ymax: 16, yunit: 4, ytitle: "a*, b*", layout: { x: 0.1, w: 0.86, h: 0.72 } });
-    step(s);
     // labels
     txt(s, "34.0", { x: mL.px(0) + 0.1, y: mL.py(34) - 0.3, w: 0.6, h: 0.25, fontSize: 12, bold: true, color: C.muted });
     txt(s, "26.4", { x: mL.px(30) - 0.55, y: mL.py(26.4) + 0.05, w: 0.6, h: 0.25, fontSize: 12, bold: true, color: C.muted });
@@ -563,7 +518,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
     txt(s, "a*", { x: mB.px(30) + 0.08, y: mB.py(3.4) - 0.15, w: 0.4, h: 0.3, fontSize: 14, bold: true, color: C.mat });
     txt(s, "2.3", { x: mB.px(5) - 0.2, y: mB.py(2.3) - 0.38, w: 0.5, h: 0.25, fontSize: 12, bold: true, color: C.amber });
     txt(s, "12.2", { x: mB.px(15) - 0.5, y: mB.py(12.2) - 0.36, w: 0.5, h: 0.25, fontSize: 12, bold: true, color: C.amber });
-    step(s);
     // takeaways
     const tk = [["L*", "darkens in incubation  34.0 → 30.3", C.muted], ["b*", "jumps in propagation  2.3 → 12.2", C.amber], ["", "Both level off in maturation", C.mat]];
     tk.forEach(([k, t, col], i) => {
@@ -579,7 +533,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
   {
     const s = base("b* tracks damage in the same direction");
     const lw = 6.0;
-    step(s);
     txt(s, "Linear fit, R²", { x: MX, y: 1.3, w: 4, h: 0.3, fontSize: 14, bold: true });
     [[C.rust, "vs rust area"], [C.faint, "vs O content"]].forEach(([col, t], i) => {
       const x = MX + 2.2 + i * 1.8;
@@ -597,7 +550,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       catAxisLabelColor: C.ink, catAxisLabelFontSize: 16, catAxisLabelFontFace: HF,
       valGridLine: { color: "E6E8EB", size: 0.75 }, catGridLine: { style: "none" }, catAxisLineColor: C.faint, valAxisLineShow: false,
     });
-    step(s);
     // Spearman: signed horizontal bars, one series per channel for per-bar colour
     const rx = MX + lw + 0.5, rw = W - MX - rx;
     txt(s, "Spearman ρ with corrosion rate (mmpy)", { x: rx, y: 1.3, w: rw, h: 0.3, fontSize: 14, bold: true });
@@ -611,7 +563,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       valGridLine: { color: "E6E8EB", size: 0.75 }, catGridLine: { style: "none" }, catAxisLineColor: C.faint, valAxisLineShow: false,
     });
     txt(s, "p = 0.0009 (L*)   ·   0.0016 (b*)   ·   0.0228 (a*)", { x: rx, y: 5.12, w: rw, h: 0.3, fontSize: 11.5, color: C.muted, align: "center" });
-    step(s);
     card(s, rx, 5.55, rw, 1.15, C.rustLight);
     txt(s, [
       { text: "b* chosen as indicator", options: { bold: true, color: C.rust, breakLine: true } },
@@ -630,7 +581,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
     const L = { x: 0.11, y: 0.04, w: 0.85, h: 0.82 };
     const pa = { x: box.x + L.x * box.w, y: box.y + L.y * box.h, w: L.w * box.w, h: L.h * box.h };
     const px = (v) => pa.x + ((v - xmin) / (xmax - xmin)) * pa.w, py = (v) => pa.y + (1 - (v - ymin) / (ymax - ymin)) * pa.h;
-    step(s);
     // stage range boxes (Table 3)
     const rng = [[-0.2, 2.7, 0.193, 0.447], [6.6, 12.2, 0.524, 0.838], [12.1, 13.9, 1.176, 1.745]];
     rng.forEach(([b0, b1, r0, r1], k) => {
@@ -650,16 +600,13 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       showValAxisTitle: true, valAxisTitle: "Corrosion rate (mmpy)", valAxisTitleFontSize: 12, valAxisTitleColor: C.muted,
       showCatAxisTitle: true, catAxisTitle: "b*  (yellowness)", catAxisTitleFontSize: 12, catAxisTitleColor: C.muted,
     });
-    step(s);
     // stage labels near boxes
     txt(s, "Incubation", { x: px(-0.2) - 0.05, y: py(0.447) - 0.42, w: 1.5, h: 0.3, fontSize: 13, bold: true, color: C.inc });
     txt(s, "Propagation", { x: px(6.6) - 0.05, y: py(0.838) - 0.42, w: 1.6, h: 0.3, fontSize: 13, bold: true, color: C.prop });
     txt(s, "Maturation", { x: px(12.1) - 1.6, y: py(1.745) - 0.05, w: 1.45, h: 0.3, fontSize: 13, bold: true, color: C.mat, align: "right" });
-    step(s);
     // rho badge
     s.addShape(RR, { x: pa.x + 0.2, y: pa.y + 0.2, w: 2.1, h: 0.75, fill: { color: C.white }, line: { color: C.line }, rectRadius: 0.08 });
     txt(s, [{ text: "ρ = 0.883", options: { fontFace: HF, bold: true, fontSize: 20, color: C.ink, breakLine: true } }, { text: "p = 0.0016,  n = 9", options: { fontSize: 11, color: C.muted } }], { x: pa.x + 0.2, y: pa.y + 0.2, w: 2.1, h: 0.75, align: "center", valign: "middle" });
-    step(s);
     // mechanism panel
     const mx = 8.35, mw = W - MX - mx;
     card(s, mx, 1.3, mw, 5.4, C.panel);
@@ -692,9 +639,7 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       { name: "Corrosion rate", values: norm(CR), color: C.ink },
     ];
     const box = { x: MX, y: 1.25, w: 7.6, h: 4.0 };
-    step(s);
     const m = xyChart(s, box, ser, { ymin: 0, ymax: 1.05, yunit: 0.25, ytitle: "Normalized (0 = min, 1 = max)", layout: { x: 0.11, y: 0.05, w: 0.85, h: 0.76 }, symbol: 6, lineSize: 2 });
-    step(s);
     // O content has five points only: add as separate chart overlay is overkill — list as legend note instead
     const lg = ser.map((sr) => [sr.color, sr.name]);
     lg.forEach(([col, t], i) => {
@@ -705,7 +650,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
     txt(s, "All rise sharply in propagation", { x: 8.5, y: 2.95, w: 4.2, h: 0.35, fontSize: 14, bold: true, color: C.prop });
     txt(s, "Rust area and b* plateau in maturation; Sz and corrosion rate keep rising → layer thickens, not spreads", { x: 8.5, y: 3.35, w: 4.2, h: 0.95, fontSize: 12.5, color: C.muted });
     txt(s, "Sz 0.02 → 0.10 mm  (5×)", { x: 8.5, y: 4.4, w: 4.2, h: 0.35, fontSize: 14, bold: true, color: C.teal });
-    step(s);
     // stage schematic
     const cw = (W - 2 * MX - 0.4) / 3, y0 = 5.5;
     const desc = ["Amorphous oxide nuclei at isolated sites", "γ-FeOOH + Fe₃O₄ crystallize and spread", "Layer thickens; transport-controlled"];
@@ -736,7 +680,7 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       ["?", "Testable prediction", "Equal thickness, different γ-FeOOH fraction → different b*", I.flask],
     ];
     const cw = (W - 2 * MX - 0.6) / 3;
-    cards.forEach(([big, t, d, ic], i) => { step(s);
+    cards.forEach(([big, t, d, ic], i) => {
       const x = MX + i * (cw + 0.3), y = 1.4;
       card(s, x, y, cw, 3.85, i === 0 ? C.rustLight : C.panel);
       iconDot(s, ic, x + 0.35, y + 0.35, 0.75, i === 0 ? C.rust : C.ink);
@@ -744,7 +688,6 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       txt(s, t, { x: x + 0.35, y: y + 1.45, w: cw - 0.7, h: 0.5, fontFace: HF, fontSize: 20, bold: true });
       txt(s, d, { x: x + 0.35, y: y + 2.05, w: cw - 0.7, h: 1.5, fontSize: 15, color: C.muted });
     });
-    step(s);
     // limits
     s.addShape(RR, { x: MX, y: 5.55, w: W - 2 * MX, h: 1.1, fill: { color: C.white }, line: { color: C.line, width: 1 }, rectRadius: 0.08 });
     txt(s, "LIMITS", { x: MX + 0.35, y: 5.55, w: 1.2, h: 1.1, fontSize: 12, bold: true, color: C.muted, charSpacing: 1, valign: "middle" });
@@ -774,12 +717,10 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
       "이 연구는 해양수산부 지원으로 수행했습니다. 경청해 주셔서 감사합니다. 질문 받겠습니다.");
   }
 
-  pres._slides.forEach(tagSteps);
-
   // Make pptxgenjs chart XML schema-valid; PowerPoint repairs (drops) charts otherwise.
   const JSZip = require("jszip");
   const zip = await JSZip.loadAsync(await pres.write({ outputType: "nodebuffer" }));
-  await addAnimations(zip);
+  await cleanSlides(zip);
   for (const name of Object.keys(zip.files).filter((n) => /^ppt\/charts\/chart\d+\.xml$/.test(n))) {
     const xml = await zip.file(name).async("string");
     let fixed = xml
@@ -804,80 +745,18 @@ function note(s, en, ko) { s.addNotes(`[EN]\n${en}\n\n[KO 참고]\n${ko}`); }
   console.log("wrote", OUT);
 })();
 
-// ---------- native PowerPoint animations ----------
-// pptxgenjs has no animation API, so write <p:timing> ourselves. Each slide's
-// reveal groups (see step()) play automatically one after another once the
-// slide opens: one click per slide is still enough to present. Line/scatter
-// charts wipe in from the left (the "drawing" effect of the HTML deck),
-// column charts from the bottom, the donut with a wheel, everything else fades.
-const FX = {
-  fade: { preset: 10, sub: 0, filter: "fade", dur: 500 },
-  wipeRight: { preset: 22, sub: 8, filter: "wipe(right)", dur: 1100 },
-  wipeUp: { preset: 22, sub: 4, filter: "wipe(up)", dur: 900 },
-  wheel: { preset: 21, sub: 1, filter: "wheel(1)", dur: 900 },
-};
-async function addAnimations(zip) {
-  const slideNames = Object.keys(zip.files).filter((n) => /^ppt\/slides\/slide\d+\.xml$/.test(n));
-  for (const name of slideNames) {
-    let xml = await zip.file(name).async("string");
-    const rels = await zip.file(name.replace("slides/", "slides/_rels/") + ".rels").async("string");
-    const groups = [];
-    const re = /<p:cNvPr id="(\d+)" name="anim (\d+) \d+"/g;
-    let m;
-    while ((m = re.exec(xml))) {
-      const spid = m[1], g = +m[2], at = m.index;
-      const kinds = ["<p:sp>", "<p:pic>", "<p:graphicFrame>"].map((t) => [t, xml.lastIndexOf(t, at)]);
-      const kind = kinds.sort((a, b) => b[1] - a[1])[0][0];
-      let fx = "fade";
-      if (kind === "<p:graphicFrame>") {
-        const rid = /r:id="(rId\d+)"/.exec(xml.slice(at, xml.indexOf("</p:graphicFrame>", at)))[1];
-        // chart targets may be relative (../charts/) or absolute (/ppt/charts/)
-        const target = new RegExp(`Id="${rid}"[^>]*Target="[^"]*charts/(chart\\d+\\.xml)"`).exec(rels);
-        const chart = target ? await zip.file("ppt/charts/" + target[1]).async("string") : "";
-        if (chart.includes("<c:doughnutChart>")) fx = "wheel";
-        else if (chart.includes('<c:barDir val="col"/>')) fx = "wipeUp";
-        else fx = "wipeRight";
-      }
-      (groups[g] = groups[g] || []).push({ spid, kind, fx });
-    }
-    const steps = groups.filter(Boolean);
-    let id = 3, t = 300;
-    const eff = (e, first) => {
-      const f = FX[e.fx], a = ++id, b = ++id, c = ++id, tgt = `<p:tgtEl><p:spTgt spid="${e.spid}"/></p:tgtEl>`;
-      return `<p:par><p:cTn id="${a}" presetID="${f.preset}" presetClass="entr" presetSubtype="${f.sub}" fill="hold" grpId="0" nodeType="${first ? "afterEffect" : "withEffect"}"><p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst>` +
-        `<p:set><p:cBhvr><p:cTn id="${b}" dur="1" fill="hold"><p:stCondLst><p:cond delay="0"/></p:stCondLst></p:cTn>${tgt}<p:attrNameLst><p:attrName>style.visibility</p:attrName></p:attrNameLst></p:cBhvr><p:to><p:strVal val="visible"/></p:to></p:set>` +
-        `<p:animEffect transition="in" filter="${f.filter}"><p:cBhvr><p:cTn id="${c}" dur="${f.dur}"/>${tgt}</p:cBhvr></p:animEffect></p:childTnLst></p:cTn></p:par>`;
-    };
-    let body = "";
-    steps.forEach((grp) => {
-      const gid = ++id;
-      body += `<p:par><p:cTn id="${gid}" fill="hold"><p:stCondLst><p:cond delay="${t}"/></p:stCondLst><p:childTnLst>${grp.map((e, i) => eff(e, i === 0)).join("")}</p:childTnLst></p:cTn></p:par>`;
-      t += Math.max(...grp.map((e) => FX[e.fx].dur)) + 100;
-    });
-    const bld = steps.flat().map((e) => e.kind === "<p:sp>" ? `<p:bldP spid="${e.spid}" grpId="0" animBg="1"/>`
-      : e.kind === "<p:graphicFrame>" ? `<p:bldGraphic spid="${e.spid}" grpId="0"><p:bldAsOne/></p:bldGraphic>` : "").join("");
-    const timing = !steps.length ? "" :
-      `<p:timing><p:tnLst><p:par><p:cTn id="1" dur="indefinite" restart="never" nodeType="tmRoot"><p:childTnLst>` +
-      `<p:seq concurrent="1" nextAc="seek"><p:cTn id="2" dur="indefinite" nodeType="mainSeq"><p:childTnLst>` +
-      `<p:par><p:cTn id="3" fill="hold"><p:stCondLst><p:cond delay="indefinite"/><p:cond evt="onBegin" delay="0"><p:tn val="2"/></p:cond></p:stCondLst><p:childTnLst>${body}</p:childTnLst></p:cTn></p:par>` +
-      `</p:childTnLst></p:cTn><p:prevCondLst><p:cond evt="onPrev" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:prevCondLst>` +
-      `<p:nextCondLst><p:cond evt="onNext" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:nextCondLst></p:seq>` +
-      `</p:childTnLst></p:cTn></p:par></p:tnLst>${bld ? `<p:bldLst>${bld}</p:bldLst>` : ""}</p:timing>`;
-    const transition = `<p:transition spd="med"><p:fade/></p:transition>`;
-    // p:sld child order: cSld, clrMapOvr, transition, timing, extLst
-    const anchor = xml.includes("</p:clrMapOvr>") ? "</p:clrMapOvr>" : "</p:cSld>";
-    xml = xml.replace(anchor, anchor + transition + timing);
-    // pptxgenjs repeats <a:pPr> between runs of a multi-style paragraph; only the
-    // leading one is valid, so drop the rest (PowerPoint ignores them anyway)
-    // (also when an empty leading run leaves two <a:pPr> side by side)
-    xml = xml.replace(/<a:p>([\s\S]*?)<\/a:p>/g, (p, inner) => {
+// ---------- slide XML cleanup ----------
+async function cleanSlides(zip) {
+  for (const name of Object.keys(zip.files).filter((n) => /^ppt\/slides\/slide\d+\.xml$/.test(n))) {
+    const xml = await zip.file(name).async("string");
+    // pptxgenjs repeats <a:pPr> between runs of a multi-style paragraph (and after an
+    // empty leading run); only the first is valid, PowerPoint ignores the rest.
+    const fixed = xml.replace(/<a:p>([\s\S]*?)<\/a:p>/g, (p, inner) => {
       const PPR = /<a:pPr\b[^>]*\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/g;
       const all = inner.match(PPR);
       if (!all || all.length < 2) return p;
       return `<a:p>${all[0]}${inner.replace(PPR, "")}</a:p>`;
     });
-    // restore readable shape names once they have served as animation tags
-    xml = xml.replace(/name="anim (\d+) (\d+)"/g, 'name="Reveal $1.$2"');
-    zip.file(name, xml);
+    if (fixed !== xml) zip.file(name, fixed);
   }
 }
