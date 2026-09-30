@@ -12,17 +12,3 @@
   --shadow-lg:0 24px 62px rgba(0,0,0,.6);
   --font-sans:'Inter','Noto Sans KR','Noto Sans SC',sans-serif;
 }
-
-/* ICIMC deck: chart + stage colours stepped for this dark surface
- * (dataviz validator, --mode dark --surface 1a1b26: series pass; stage trio
- * CVD 6.5 = allowed with the text labels every stage carries). */
-:root{
-  --c-rust:#c9652d;--c-teal:#17998b;--c-gold:#b98a1a;--c-purple:#8672e0;
-  --c-gray:#9aa0a6;--c-red:#e06a5a;
-  --c-inc:#4a82c4;--c-prop:#2e9e6e;--c-mat:#e06a5a;
-  --c-inc-l:color-mix(in srgb,#4a82c4 18%,#1a1b26);
-  --c-prop-l:color-mix(in srgb,#2e9e6e 18%,#1a1b26);
-  --c-mat-l:color-mix(in srgb,#e06a5a 18%,#1a1b26);
-  --rust-l:color-mix(in srgb,#c9652d 20%,#1a1b26);
-  --cover-bg:#16161e;
-}

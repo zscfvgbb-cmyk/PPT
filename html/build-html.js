@@ -393,7 +393,7 @@ slide("", `
 
 // ---------- page ----------
 const html = `<!DOCTYPE html>
-<html lang="en" data-themes="rust-lab,academic-paper,editorial-serif,corporate-clean,tokyo-night">
+<html lang="en" data-themes="rust-lab,academic-paper,editorial-serif,corporate-clean,minimal-white,swiss-grid,japanese-minimal,engineering-whiteprint,solarized-light,catppuccin-latte,arctic-cool,sunset-warm,soft-pastel,xiaohongshu-white,midcentury,bauhaus,magazine-bold,news-broadcast,pitch-deck-vc,sharp-mono,neo-brutalism,memphis-pop,retro-tv,rainbow-gradient,y2k-chrome,glassmorphism,blueprint,tokyo-night,dracula,nord,catppuccin-mocha,gruvbox-dark,rose-pine,terminal-green,cyberpunk-neon,aurora,vaporwave">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
