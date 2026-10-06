@@ -4,7 +4,8 @@
   "description": "Generator for the ICIMC 2026 oral presentation deck",
   "scripts": {
     "build": "node build.js ../ICIMC2026_Woo_colorimetry.pptx",
-    "build:academic": "node build.js ../ICIMC2026_Woo_colorimetry_academic.pptx academic"
+    "build:academic": "node build.js ../ICIMC2026_Woo_colorimetry_academic.pptx academic",
+    "build:ir": "node ir.js ../A-STREAM2026_IR_pitch.pptx"
   },
   "dependencies": {
     "pptxgenjs": "^3.12.0",
